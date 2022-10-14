@@ -37,6 +37,10 @@ agpVal <- as.numeric( unlist(agpVal) )
 agpVal <- setNames(agpVal, agp)
 agpVal
 
+agpDT <- data.table(age = agp[-6], val = agpVal[-6])
+agpDT[, id := 1:.N]
+agpDT
+
 
 ### Population data
 kh_load(PxWebApiData)
@@ -54,15 +58,23 @@ befolk <- ApiData("http://data.ssb.no/api/v0/en/table/07459",
 str(befolk)
 dt <- befolk[[1]]
 setDT(dt)
-dt
+dt <- dt[year %chin% "2021"]
 dt[, .N, by=region]
 dt[, .N, by=age]
 dt[, alder := as.numeric( gsub("\\D+", "\\1", age) )]
-dt[, agp := fcase(alder <20, 1,
-                  alder %in% 20:39, 2,
-                  alder %in% 40:59, 3,
-                  alder %in% 60:79, 4,
-                  alder >79, 5)]
+dt[, id := fcase(alder <20, 1,
+                 alder %in% 20:39, 2,
+                 alder %in% 40:59, 3,
+                 alder %in% 60:79, 4,
+                 alder >79, 5)]
 
-dt[, .N, keyby=agp]
-dt[agp == 1]
+dt
+dt[alder == 80]
+setkey(dt, id)
+dt[, ageVal := sum(value, na.rm = T), by = id]
+dd <- dt[!duplicated(id), .(id, ageVal)]
+
+
+DT <- agpDT[dd, on = "id"]
+DT[, pros := (val / ageVal)*10000]
+DT
