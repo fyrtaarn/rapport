@@ -2,11 +2,36 @@
 # ------------------------------------
 
 source("https://raw.githubusercontent.com/helseprofil/misc/main/utils.R")
-kh_load(pdftools, data.table, stringi)
+kh_load(pdftools, data.table, stringi, stringr)
 
 rootPath <- "c:/Users/ybka/Git-fhi/rapport/npr"
 
 txtpdf <- pdftools::pdf_text(file.path(rootPath, "Aarsrapport_personskadedata_2021.pdf" ))
+
+## Tabell 1
+## ----------------------------
+tbl01 <- txtpdf[grep("Tabell 1. Kontakt\U00E5rsak fordelt", txtpdf)]
+tbl01 <- stringi::stri_split_fixed(tbl01, "\n")
+
+# Total
+tbl01tot <- tbl01[[1]][24]
+tbl01tot <- stringi::stri_replace_all_regex(tbl01tot, "\\s+", " ")
+tbl01tot <- trimws(tbl01tot)
+vec01 <- regmatches(tbl01tot, gregexpr("[[:digit:]]+", tbl01tot))
+vec01 <- unlist(vec01)
+vec01 <- vec01[vec01!="100"]
+vec01 <- matrix(vec01, ncol = 2, byrow = T)
+vec01 <- as.data.table(vec01)
+vec01[, case := paste0(V1, V2)]
+vec01
+tabTot <- as.numeric(vec01$case)
+tabTot
+
+
+tbl01x <- tbl01[[1]][16:23]
+## tbl01x <- gsub("(?<=[\s])\s*|^\s+|\s+$", "", tbl01x, perl = TRUE)
+## tbl01x <- stringr::str_squish(tbl01x)
+tbl01x <- stringi::stri_replace_all_regex(tbl01x, "\\s+", " ")
 
 
 ## Tabell 15
@@ -73,13 +98,13 @@ dt[, id := fcase(alder <20, 1,
                  alder %in% 60:79, 4,
                  alder >79, 5)]
 
-dt
-dt[alder == 80]
-setkey(dt, id)
-dt[, ageVal := sum(value, na.rm = T), by = id]
-dd <- dt[!duplicated(id), .(id, ageVal)]
+     dt
+     dt[alder == 80]
+     setkey(dt, id)
+     dt[, ageVal := sum(value, na.rm = T), by = id]
+     dd <- dt[!duplicated(id), .(id, ageVal)]
 
 
-DT <- agpDT[dd, on = "id"]
-DT[, pros := (val / ageVal)*10000]
-DT
+     DT <- agpDT[dd, on = "id"]
+     DT[, pros := (val / ageVal)*10000]
+     DT
