@@ -4,7 +4,9 @@
 source("https://raw.githubusercontent.com/helseprofil/misc/main/utils.R")
 kh_load(pdftools, data.table, stringi)
 
-txtpdf <- pdftools::pdf_text("Aarsrapport_personskadedata_2021.pdf")
+rootPath <- "c:/Users/ybka/Git-fhi/rapport/npr"
+
+txtpdf <- pdftools::pdf_text(file.path(rootPath, "Aarsrapport_personskadedata_2021.pdf" ))
 
 tbl15 <- txtpdf[grep("Tabell 15: Veitrafikkulykke", txtpdf)]
 tblVei <- stringi::stri_split(tbl15, fixed = "\n")
