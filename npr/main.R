@@ -56,6 +56,7 @@ age_group <- function(per = 100){
   DT[, pros := (case / pop)*per]
   DT[, id := NULL]
 
+  message("Veitrafikkulykke fordelt p\U00E5 aldersgrupper")
   message("Insidens per ", per)
   DT[]
 }

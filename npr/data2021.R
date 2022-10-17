@@ -8,6 +8,9 @@ rootPath <- "c:/Users/ybka/Git-fhi/rapport/npr"
 
 txtpdf <- pdftools::pdf_text(file.path(rootPath, "Aarsrapport_personskadedata_2021.pdf" ))
 
+
+## Tabell 15
+## -------------------------------------------------------------
 tbl15 <- txtpdf[grep("Tabell 15: Veitrafikkulykke", txtpdf)]
 tblVei <- stringi::stri_split(tbl15, fixed = "\n")
 
