@@ -15,9 +15,13 @@ tbl01 <- stringi::stri_split_fixed(tbl01, "\n")
 
 # Total
 tbl01tot <- tbl01[[1]][24]
-tbl01tot <- stringi::stri_replace_all_regex(tbl01tot, "\\s+", " ")
+tbl01tot <- stringi::stri_replace_all_regex(tbl01tot, "\\s+", " ") #delete multiple whitespace
+tbl01tot <- stringi::stri_replace_all_regex(tbl01tot, "[^\\d+]", " ") #delete all other than digits
+tbl01tot
+
 tbl01tot <- trimws(tbl01tot)
-vec01 <- regmatches(tbl01tot, gregexpr("[[:digit:]]+", tbl01tot))
+## vec01 <- regmatches(tbl01tot, gregexpr("[[:digit:]]+", tbl01tot))
+vec01 <- stringi::stri_split_fixed(tbl01tot, " ")
 vec01 <- unlist(vec01)
 vec01 <- vec01[vec01!="100"]
 vec01 <- matrix(vec01, ncol = 2, byrow = T)
@@ -28,10 +32,63 @@ tabTot <- as.numeric(vec01$case)
 tabTot
 
 
+
 tbl01x <- tbl01[[1]][16:23]
 ## tbl01x <- gsub("(?<=[\s])\s*|^\s+|\s+$", "", tbl01x, perl = TRUE)
 ## tbl01x <- stringr::str_squish(tbl01x)
 tbl01x <- stringi::stri_replace_all_regex(tbl01x, "\\s+", " ")
+tbl01x <- trimws(tbl01x)
+tbl01x
+
+
+
+table_pro <- function(x, row, char){
+  dt <- x[row]
+
+  if (missing(char)){
+    dt <- stringi::stri_replace_all_regex(dt, "[^,|\\d+]", " ") #delete all other than , or digits
+  } else {
+    dt <- stringi::stri_replace_all_fixed(dt, char, "")
+  }
+
+  dt <- stringi::stri_replace_all_fixed(dt, ",", ".")
+  dt <- stringi::stri_split_fixed( trimws(dt), " " )
+  dt <- unlist(dt)
+  ulno <- length(dt)
+  ulTot <- paste0(dt[ulno -1], dt[ulno])
+  dtPro <- dt[1:(ulno - 2)]
+  as.numeric(dtPro)
+
+}
+
+ulykke <- table_pro(tbl01x, row = 3)
+ulykke
+
+vold <- table_pro(tbl01x, 4, char = "Vold, overfall")
+vold
+
+villet <- table_pro(tbl01x, 5)
+villet
+
+skade <- table_pro(tbl01x, 6)
+skade
+
+ukjent <- table_pro(tbl01x, 8)
+ukjent
+
+
+## Function testing
+ulykke <- tbl01x[3]
+ulykke <- stringi::stri_replace_all_regex(ulykke, "[^,|\\d+]", " ") #delete all other than , or digits
+ulykke <- stringi::stri_replace_all_fixed(ulykke, ",", ".")
+ulykke <- stringi::stri_split_fixed( trimws(ulykke), " " )
+ulykke <- unlist(ulykke)
+ulno <- length(ulykke)
+ulno
+ulTot <- paste0(ulykke[ulno -1], ulykke[ulno])
+ulTot
+ulykkePro <- ulykke[1:(ulno - 2)]
+ulykkePro
 
 
 ## Tabell 15
