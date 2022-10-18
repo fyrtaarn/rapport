@@ -155,13 +155,13 @@ dt[, id := fcase(alder <20, 1,
                  alder %in% 60:79, 4,
                  alder >79, 5)]
 
-     dt
-     dt[alder == 80]
-     setkey(dt, id)
-     dt[, ageVal := sum(value, na.rm = T), by = id]
-     dd <- dt[!duplicated(id), .(id, ageVal)]
+dt
+dt[alder == 80]
+setkey(dt, id)
+dt[, ageVal := sum(value, na.rm = T), by = id]
+dd <- dt[!duplicated(id), .(id, ageVal)]
 
 
-     DT <- agpDT[dd, on = "id"]
-     DT[, pros := (val / ageVal)*10000]
-     DT
+DT <- agpDT[dd, on = "id"]
+DT[, pros := (val / ageVal)*10000]
+DT
