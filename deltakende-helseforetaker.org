@@ -1,0 +1,18 @@
+#+title: Deltakende enheter
+
+* Helseforetak eller sykehus
+1. Universitetssykehuset i Nord-Norge HF (UNN, Tromsø og UNN, Harstad)
+2. St. Olavs Hospital HF - Trondheim
+3. Helse Bergen HF - Haukeland
+4. Sørlandet sykehus HF - Kristiansand
+5. Sykehuset i Vestfold HF - Tønsberg
+6. Sykehuset Innlandet HF (Sykehuset i Elverum, Sykehuset i Hamar og Sykehuset i Lillehammer)
+7. Oslo universitetssykehus HF - Ullevål og Skadelegevakten
+* Legevakter
+1. Tromsø
+2. Trondheim
+3. Bergen
+4. Kristiansand
+5. Tønsberg
+6. Hamar
+7. Lillehammer
